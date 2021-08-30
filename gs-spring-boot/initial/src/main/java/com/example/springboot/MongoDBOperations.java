@@ -22,7 +22,7 @@ public class MongoDBOperations {
     }
 
     public MongoDatabase MongoDBOperationsMainFunction(){
-        ConnectionString connectionString = new ConnectionString("mongodb+srv://books:qqqq1111@cluster0.3130e.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
+        ConnectionString connectionString = new ConnectionString("mongodb+srv://books:<secret>@cluster0.3130e.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
                 .build();
