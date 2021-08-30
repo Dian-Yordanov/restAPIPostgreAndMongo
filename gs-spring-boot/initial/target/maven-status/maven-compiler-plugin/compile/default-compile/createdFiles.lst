@@ -1,6 +1,7 @@
-com\example\springboot\Book.class
 com\example\springboot\MongoDBOperations.class
-com\example\springboot\Author.class
 com\example\springboot\Application.class
 com\example\springboot\PostgreDatabaseOperations.class
+com\example\springboot\Book.class
+com\example\springboot\Author.class
+com\example\springboot\Functions.class
 com\example\springboot\HelloController.class

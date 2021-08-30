@@ -3,11 +3,20 @@ package com.example.springboot;
 import com.mongodb.*;
 import com.mongodb.client.*;
 import com.mongodb.client.model.InsertManyOptions;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.List;
 
 import java.util.*;
@@ -17,12 +26,31 @@ import static java.util.Arrays.asList;
 
 public class MongoDBOperations {
 
+    private static String mongoDBSecret = "";
+
     public void MongoDBOperations() {
 
     }
 
     public MongoDatabase MongoDBOperationsMainFunction(){
-        ConnectionString connectionString = new ConnectionString("mongodb+srv://books:<secret>@cluster0.3130e.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
+
+        Scanner scanner = null;
+        String secret ="";
+        try {
+            URL res = getClass().getClassLoader().getResource("secret.txt");
+            File file = Paths.get(res.toURI()).toFile();
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        secret=scanner.useDelimiter("\\A").next();
+        System.out.println(secret);
+        mongoDBSecret = secret;
+        scanner.close(); // Put this call in a finally block
+
+        ConnectionString connectionString = new ConnectionString("mongodb+srv://books:"+mongoDBSecret+"@cluster0.3130e.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
         MongoClientSettings settings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
                 .build();
