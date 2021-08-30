@@ -30,6 +30,9 @@ public class PostgreDatabaseOperations {
         return conn;
     }
 
+    /**
+     * Drop all tables from the PostgreSQL database
+     */
     public void dropAllTables() throws SQLException{
 
         Connection conn = DriverManager.getConnection(url, user, password);
@@ -54,6 +57,9 @@ public class PostgreDatabaseOperations {
 
     }
 
+    /**
+     * Create a table with bookId as PRIMARY KEY, bookName and bookAuthor
+     */
     public void createTable() throws SQLException {
 
         Connection conn = DriverManager.getConnection(url, user, password);
@@ -68,6 +74,9 @@ public class PostgreDatabaseOperations {
 
     }
 
+    /**
+     * insert a prepared statement with book's name and authors into the database
+     */
     public void insertUsers(List< Book > list) {
         try (
                 Connection conn = DriverManager.getConnection(url, user, password);
@@ -90,6 +99,11 @@ public class PostgreDatabaseOperations {
         }
     }
 
+    /**
+     * return a HashMap mapping between bookId and Book objects containing bookName and bookAuthor
+     *
+     * @return a HashMap<String, Book>
+     */
     public HashMap<String, Book> returnInfo() throws SQLException {
 
         Connection conn = DriverManager.getConnection(url, user, password);
@@ -105,10 +119,7 @@ public class PostgreDatabaseOperations {
             String bookAuthor = rs.getString("bookAuthor");
 
             booksSet.put(bookId, new Book(bookName, bookAuthor));
-
-//            System.out.println(bookName + ", " + bookAuthor);
         }
-
 
         return booksSet;
     }

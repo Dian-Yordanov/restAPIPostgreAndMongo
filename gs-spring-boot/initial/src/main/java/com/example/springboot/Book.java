@@ -7,6 +7,10 @@ public class Book {
     String book;
     String author;
 
+    /**
+     * Book' name and authors mapping that is used to input/read data from PostgreDB and make a mapping with the "Author" object.
+     * Different from Author not only in mapping order but also in the ability to get ID.
+     */
     public Book(String book, String author) {
 
         this.id = id;

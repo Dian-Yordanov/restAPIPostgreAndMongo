@@ -26,12 +26,15 @@ import static java.util.Arrays.asList;
 
 public class MongoDBOperations {
 
+    // you will have to provide a secret if you do not have the file. File is added to the .gitignore so it does nto leak.
     private static String mongoDBSecret = "";
 
-    public void MongoDBOperations() {
-
-    }
-
+    /**
+     * MongoDB main functions - gets a ConnectionString from the online MongoDB database.
+     * from this ConnectionString you get the "books" database and return it.
+     *
+     * @return a MongoDatabase object
+     */
     public MongoDatabase MongoDBOperationsMainFunction(){
 
         Scanner scanner = null;
@@ -60,6 +63,16 @@ public class MongoDBOperations {
         return sampleTrainingDB;
     }
 
+    /**
+     * deletes all Documents from the "book" Collection of the MongoDB database
+     */
+    public static void deleteAllDocuments(MongoDatabase sampleTrainingDB) {
+        sampleTrainingDB.getCollection("book").drop();
+    }
+
+    /**
+     * inserts Authors' name and book into the "book" collection
+     */
     public static void insertAuthorAndBook(MongoDatabase sampleTrainingDB, List< Author > list) {
         MongoCollection<Document> bookCollection = sampleTrainingDB.getCollection("book");
 
@@ -72,28 +85,11 @@ public class MongoDBOperations {
         }
     }
 
-    public static String getAuthorAndBook(MongoDatabase sampleTrainingDB) {
-        MongoCollection<Document> bookCollection = sampleTrainingDB.getCollection("book");
-        Collection<JSONObject> items = new ArrayList<JSONObject>();
-
-        MongoCursor<Document> cursor = bookCollection.find().iterator();
-        try {
-            while (cursor.hasNext()) {
-
-                JSONObject item = new JSONObject(cursor.next().toJson());
-                items.add(item);
-            }
-        } finally {
-            cursor.close();
-        }
-
-        return items.toString();
-    }
-
-    public static void deleteAllDocuments(MongoDatabase sampleTrainingDB) {
-        sampleTrainingDB.getCollection("book").drop();
-    }
-
+    /**
+     * gets Author's name and book json object from the "book" collection, filtered by "book_id"
+     *
+     * @return a JSONObject with author's name and books
+     */
     public static String getAuthorByBook(MongoDatabase sampleTrainingDB, String bookNameToLookFor) {
         MongoCollection<Document> bookCollection = sampleTrainingDB.getCollection("book");
         Collection<JSONObject> items = new ArrayList<JSONObject>();

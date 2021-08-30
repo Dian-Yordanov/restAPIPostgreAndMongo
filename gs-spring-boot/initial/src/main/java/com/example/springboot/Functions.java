@@ -8,9 +8,13 @@ import java.util.*;
 public class Functions {
 
     public Functions(){
-
     }
 
+    /**
+     * removes duplicates from the provided HashMap bookSet.
+     *
+     * @return a HashMap<String, Book> with values same as bookSet but no duplicates.
+     */
     public static HashMap<String, Book> booksSetNoDuplicates(HashMap<String, Book> bookSet){
 
         HashMap<String, Book> indexToBookMapping = new HashMap<String, Book>();
@@ -28,6 +32,15 @@ public class Functions {
         return indexToBookMapping;
     }
 
+    /**
+     * Using a lenghty process of string manupulations,
+     * takes the JsonObject string from mongoDB for each author and returns a "clean" version with only "id" and "author".
+     * Multiple revisions of how to do this in a way that works, made the code ugly. But the idea is to get the jsonString,
+     * then split it, then for each author subArray, get the needed data and add it to a new jsonObject,
+     * that is in the end added to a new jsonArray and a string cast of this array is returned.
+     *
+     * @return a string that contains Json text format.
+     */
     public static String fixedMongoDBAuthorsArray(String stringToFix){
         String stringArray = stringToFix;
         stringArray = stringToFix.substring(1,stringArray.length()-1);

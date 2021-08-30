@@ -25,9 +25,14 @@ public class HelloController {
 		MongoDBOperations mongo = new MongoDBOperations();
 		PostgreDatabaseOperations booksPostgreDB = new PostgreDatabaseOperations();
 
+		//	Delete any previous databases
 		mongo.deleteAllDocuments(mongo.MongoDBOperationsMainFunction());
 		booksPostgreDB.dropAllTables();
 
+		//	Insert a dataset of authors and books into MongoDB and PostgreDB. Multiple authors can have worked on a book
+		// and books can have multiple authors and the data sets reflect that. The "Author" and "Book" objects
+		// are actually very close to simple HashMap mappings ( with a minor additional functionality in the "Book" object),
+		// but objects are easier to work with.
 		mongo.insertAuthorAndBook(mongo.MongoDBOperationsMainFunction(), Arrays.asList(
 				new Author("Arthur C. Clarke", "2001: A Space Odyssey"),
 				new Author("Ivan Vazov", "Under the Yoke"),
@@ -46,6 +51,7 @@ public class HelloController {
 				new Book("It", "Stephen King"),
 				new Book("Under the Yoke","Ivan Vazov")));
 
+		//	remove duplicates and initialise the data sets.
 		HashMap<String, Book> booksSet = booksPostgreDB.returnInfo();
 		booksSet = Functions.booksSetNoDuplicates(booksSet);
 
@@ -57,6 +63,7 @@ public class HelloController {
 		ArrayList<String> booksName = new ArrayList<String>();
 		ArrayList<String> booksCorrespondingSet = new ArrayList<String>();
 
+		// get the mapping for books, later this mapping with be used to map each book to all authors
 		for (Map.Entry<String, Book> bookMapping : booksSet.entrySet()){
 			String mongoReturn = mongo.getAuthorByBook(mongo.MongoDBOperationsMainFunction(), bookMapping.getValue().getBookName());
 			booksID.add(bookMapping.getKey());
@@ -64,6 +71,9 @@ public class HelloController {
 			booksCorrespondingSet.add(mongoReturn);
 		}
 
+		//	having each bookMapping, now we map it to the set of authors returned from MongoDB.
+		//	All of these mappings are turned JsonObjects that are returned in a particular order : "id" -> "name" ->"authors"
+		//	All the JsonObjects are finally added to a JsonArray.
 		for(int i=0;i<booksID.size();i++){
 
 			String booksAuthorsInfo = Functions.fixedMongoDBAuthorsArray(booksCorrespondingSet.get(i));
@@ -76,6 +86,8 @@ public class HelloController {
 
 			JsonArrayToReturn.add(responseObj);
 		}
+
+		// The final JsonArray is casted into string and returned as the endpoint API response.
 
 		returnString = JsonArrayToReturn.toString();
 		return returnString;
